@@ -13,16 +13,6 @@ const jwt = require("jsonwebtoken");
 // create new user
 const createUser = async (req, res, next) => {
   try {
-    // cek user role
-    // hanya admin yang boleh membuat user baru
-    const role = req.user.role;
-    if (role !== "admin") {
-      throw new ResponseError(
-        statuscode.BadRequest,
-        "Only admins can create new users"
-      );
-    }
-
     const request = validate(createUserScema, req.body);
 
     // cek apa user sudah terdaftar
@@ -142,16 +132,6 @@ const logout = async (req, res, next) => {
 //get user by id
 const getUserById = async (req, res, next) => {
   try {
-    // cek user role
-    // hanya admin yang boleh membuat user baru
-    const role = req.user.role;
-    if (role !== "admin") {
-      throw new ResponseError(
-        statuscode.BadRequest,
-        "Only admins can create new users"
-      );
-    }
-
     const id = validate(userIdScema, parseInt(req.params.id));
     const user = await db.users.findUnique({ where: { id } });
     if (!user) {
@@ -168,4 +148,25 @@ const getUserById = async (req, res, next) => {
   }
 };
 
-module.exports = { createUser, login, logout, getUserById };
+// get all user
+const getAllUser = async (req, res, next) => {
+  try {
+    const users = await db.users.findMany({
+      select: {
+        id: true,
+        username: true,
+        is_online: true,
+        role: true,
+      },
+    });
+    res.status(statuscode.Ok).json({
+      message: "Successful",
+      data: users,
+      error: false,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createUser, login, logout, getUserById, getAllUser };

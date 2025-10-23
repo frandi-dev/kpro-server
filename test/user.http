@@ -31,4 +31,4 @@ Authorization: Berer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6Im
 ### get user by id
 GET http://localhost:3000/api/users/2
 content-type: application/json
-Authorization: Berer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxMjM0Nzc5LCJleHAiOjE3NjEzMjExNzl9.iI5pLIcpfsD4X-pZVD7NFTk6nRbC-D7Kqt2_Gk6zNwg
+Authorization: Berer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxMjM3NjI4LCJleHAiOjE3NjEzMjQwMjh9.osd8tjyvqL_gmO6uY4PbjzGx9lRauw5I2tCrzfkvIuY

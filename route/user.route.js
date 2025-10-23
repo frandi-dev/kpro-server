@@ -1,10 +1,17 @@
 const route = require("express").Router();
 const userController = require("../controller/user.controller");
-const { authorization } = require("../middleware/auth-middleware");
+const { authorization, authrole } = require("../middleware/auth-middleware");
 
-route.post("/", authorization, userController.createUser);
+route.post("/", authorization, authrole(["admin"]), userController.createUser);
+route.get(
+  "/:id",
+  authorization,
+  authrole(["admin"]),
+  userController.getUserById
+);
+route.get("/", authorization, authrole(["admin"]), userController.getAllUser);
+
 route.post("/login", userController.login);
 route.post("/logout", authorization, userController.logout);
-route.get("/:id", authorization, userController.getUserById);
 
 module.exports = route;
