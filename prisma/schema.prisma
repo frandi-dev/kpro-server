@@ -13,6 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ========== MODELS ==========
 
 model Users {
   id         Int       @id @default(autoincrement())
@@ -22,13 +23,14 @@ model Users {
   is_online  Boolean   @default(false)
 
   orders     Orders[]
+  ladyOrders LadyOrders[]
   billings   Billings[]
 }
 
 model Customers {
   id          Int        @id @default(autoincrement())
   name        String
-  phone       String? 
+  phone       String?
   created_at  DateTime   @default(now())
 
   sessions    Sessions[]
@@ -40,7 +42,7 @@ model Lady {
   price_per_hour Decimal?   @db.Decimal(10, 2)
   status        LadyStatus @default(offline)
 
-  orders        Orders[]
+  ladyOrders    LadyOrders[]
 }
 
 model Rooms {
@@ -53,17 +55,18 @@ model Rooms {
 }
 
 model Sessions {
-  id               Int         @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
   customer_id      Int
   room_id          Int
   minutes_duration Int
   start_time       DateTime
   end_time         DateTime?
-  status           SessionStatus @default(active)
+  status           SessionStatus  @default(active)
 
-  customer         Customers    @relation(fields: [customer_id], references: [id])
-  room             Rooms        @relation(fields: [room_id], references: [id])
+  customer         Customers      @relation(fields: [customer_id], references: [id])
+  room             Rooms          @relation(fields: [room_id], references: [id])
   orders           Orders[]
+  ladyOrders       LadyOrders[]
   billings         Billings[]
 }
 
@@ -83,12 +86,23 @@ model Orders {
   session_id  Int
   item_id     Int?
   user_id     Int
-  lady_id     Int?
   quantity    Int
   order_time  DateTime  @default(now())
 
   session     Sessions  @relation(fields: [session_id], references: [id])
   item        MenuItems? @relation(fields: [item_id], references: [id])
+  user        Users     @relation(fields: [user_id], references: [id])
+}
+
+model LadyOrders {
+  id          Int       @id @default(autoincrement())
+  session_id  Int
+  user_id     Int
+  lady_id     Int?
+  hours       Int
+  order_time  DateTime  @default(now())
+
+  session     Sessions  @relation(fields: [session_id], references: [id])
   user        Users     @relation(fields: [user_id], references: [id])
   lady        Lady?     @relation(fields: [lady_id], references: [id])
 }
@@ -99,6 +113,7 @@ model Billings {
   user_id         Int
   room_charge     Decimal?     @db.Decimal(10, 2)
   order_charge    Decimal?     @db.Decimal(10, 2)
+  lady_charge     Decimal?     @db.Decimal(10, 2)
   discount_amount Decimal      @default(0) @db.Decimal(10, 2)
   tax_amount      Decimal      @default(0) @db.Decimal(10, 2)
   total_amount    Decimal?     @db.Decimal(10, 2)
@@ -111,7 +126,8 @@ model Billings {
   user            Users         @relation(fields: [user_id], references: [id])
 }
 
-// ENUMS
+// ========== ENUMS ==========
+
 enum Role {
   admin
   cashier
