@@ -4,6 +4,13 @@ const statuscode = require("../utils/statuscode");
 const validate = require("../validation");
 const { userIdScema } = require("../validation/user.scema");
 
+// contoh di client
+// import { io } from "socket.io-client";
+// const socket = io("http://localhost:3000");
+// socket.emit("user_online", userId);
+// Saat aplikasi ditutup paksa, socket akan otomatis "disconnect"
+// dan server akan set is_online = false
+
 const connection = (socket) => {
   console.log("Client connected: ", socket.id);
 
