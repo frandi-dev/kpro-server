@@ -107,6 +107,12 @@ model LadyOrders {
   lady        Lady?     @relation(fields: [lady_id], references: [id])
 }
 
+
+// total_amount = room_charge + order_charge + lady_charge
+// final_amount = total_amount 
+//              - discount_amount 
+//              + tax_amount
+
 model Billings {
   id              Int          @id @default(autoincrement())
   session_id      Int
