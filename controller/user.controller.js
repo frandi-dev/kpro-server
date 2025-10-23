@@ -159,6 +159,9 @@ const getAllUser = async (req, res, next) => {
         is_online: true,
         role: true,
       },
+      orderBy: {
+        id: "asc",
+      },
     });
     res.status(statuscode.Ok).json({
       message: "Successful",
@@ -185,6 +188,10 @@ const updateUser = async (req, res, next) => {
       },
     });
 
+    if (!user) {
+      throw new ResponseError(statuscode.NotFound, "User not found.");
+    }
+
     const data = {};
     if (request.password) {
       data.password = await bcrypt.hash(request.password, 10);
@@ -209,8 +216,35 @@ const updateUser = async (req, res, next) => {
     });
 
     res.status(statuscode.Ok).json({
-      message: "User Updated Successful",
+      message: "User updated Successful",
       data,
+      error: false,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteUser = async (req, res, next) => {
+  try {
+    const id = validate(userIdScema, parseInt(req.params.id));
+
+    // cek user
+    const count = await db.users.count({
+      where: {
+        id,
+      },
+    });
+
+    if (count === 0) {
+      throw new ResponseError(statuscode.NotFound, "User not found.");
+    }
+
+    await db.users.delete({ where: { id } });
+
+    res.status(statuscode.Ok).json({
+      message: "User deleted Successful",
+      data: null,
       error: false,
     });
   } catch (error) {
@@ -225,4 +259,5 @@ module.exports = {
   getUserById,
   getAllUser,
   updateUser,
+  deleteUser,
 };

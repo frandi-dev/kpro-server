@@ -17,6 +17,13 @@ route.patch(
   userController.updateUser
 );
 
+route.delete(
+  "/:id",
+  authorization,
+  authrole(["admin"]),
+  userController.deleteUser
+);
+
 route.post("/login", userController.login);
 route.post("/logout", authorization, userController.logout);
 

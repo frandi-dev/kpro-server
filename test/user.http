@@ -50,3 +50,8 @@ Authorization: Berer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6Im
   "password": "1234",
   "role": "cashier"
 }
+
+### delete user
+DELETE  http://localhost:3000/api/users/4
+content-type: application/json
+Authorization: Berer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxMjM3NjI4LCJleHAiOjE3NjEzMjQwMjh9.osd8tjyvqL_gmO6uY4PbjzGx9lRauw5I2tCrzfkvIuY
