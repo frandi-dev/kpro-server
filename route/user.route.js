@@ -10,6 +10,12 @@ route.get(
   userController.getUserById
 );
 route.get("/", authorization, authrole(["admin"]), userController.getAllUser);
+route.patch(
+  "/:id",
+  authorization,
+  authrole(["admin"]),
+  userController.updateUser
+);
 
 route.post("/login", userController.login);
 route.post("/logout", authorization, userController.logout);

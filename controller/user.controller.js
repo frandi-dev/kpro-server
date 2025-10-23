@@ -2,6 +2,7 @@ const {
   createUserScema,
   loginUserScema,
   userIdScema,
+  updateUserScema,
 } = require("../validation/user.scema");
 const validate = require("../validation");
 const db = require("../utils/db");
@@ -169,4 +170,59 @@ const getAllUser = async (req, res, next) => {
   }
 };
 
-module.exports = { createUser, login, logout, getUserById, getAllUser };
+// update user
+const updateUser = async (req, res, next) => {
+  try {
+    const request = validate(updateUserScema, {
+      id: parseInt(req.params.id),
+      ...req.body,
+    });
+
+    const user = await db.users.findUnique({
+      where: { id: request.id },
+      select: {
+        role: true,
+      },
+    });
+
+    const data = {};
+    if (request.password) {
+      data.password = await bcrypt.hash(request.password, 10);
+    }
+
+    if (request.username) {
+      data.username = request.username;
+    }
+
+    if (request.role) {
+      data.role = request.role;
+    } else {
+      data.role = user.role;
+    }
+
+    // masuk data
+    await db.users.update({
+      data,
+      where: {
+        id: request.id,
+      },
+    });
+
+    res.status(statuscode.Ok).json({
+      message: "User Updated Successful",
+      data,
+      error: false,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  createUser,
+  login,
+  logout,
+  getUserById,
+  getAllUser,
+  updateUser,
+};

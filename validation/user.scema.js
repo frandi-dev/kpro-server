@@ -13,4 +13,16 @@ const loginUserScema = Joi.object({
 
 const userIdScema = Joi.number().integer().required();
 
-module.exports = { createUserScema, loginUserScema, userIdScema };
+const updateUserScema = Joi.object({
+  id: Joi.number().integer().required(),
+  username: Joi.string().min(3).max(50).optional(),
+  password: Joi.string().optional(),
+  role: Joi.string().valid("admin", "cashier", "waiter").optional(),
+});
+
+module.exports = {
+  createUserScema,
+  loginUserScema,
+  userIdScema,
+  updateUserScema,
+};
