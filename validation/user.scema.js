@@ -6,4 +6,9 @@ const createUserScema = Joi.object({
   role: Joi.string().valid("admin", "cashier", "waiter"),
 });
 
-module.exports = { createUserScema };
+const loginUserScema = Joi.object({
+  username: Joi.string().min(3).max(50).required(),
+  password: Joi.string().required(),
+});
+
+module.exports = { createUserScema, loginUserScema };

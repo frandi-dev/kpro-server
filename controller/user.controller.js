@@ -1,13 +1,24 @@
-const { createUserScema } = require("../validation/user.scema");
+const { createUserScema, loginUserScema } = require("../validation/user.scema");
 const validate = require("../validation");
 const db = require("../utils/db");
 const ResponseError = require("../utils/response-error");
 const statuscode = require("../utils/statuscode");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // create new user
 const createUser = async (req, res, next) => {
   try {
+    // cek user role
+    // hanya admin yang boleh membuat user baru
+    const role = req.user.role;
+    if (role !== "admin") {
+      throw new ResponseError(
+        statuscode.BadRequest,
+        "Only admins can create new users"
+      );
+    }
+
     const request = validate(createUserScema, req.body);
 
     // cek apa user sudah terdaftar
@@ -46,9 +57,80 @@ const createUser = async (req, res, next) => {
 // login user
 const login = async (req, res, next) => {
   try {
+    const request = validate(loginUserScema, req.body);
+
+    // cek apa user ada
+    const user = await db.users.findUnique({
+      where: { username: request.username },
+    });
+    if (!user) {
+      throw new ResponseError(
+        statuscode.NotFound,
+        "Username or password wrong."
+      );
+    }
+
+    // cek password
+    const matchPass = await bcrypt.compare(request.password, user.password);
+    if (!matchPass) {
+      throw new ResponseError(
+        statuscode.BadRequest,
+        "Username or password wrong."
+      );
+    }
+
+    // register token
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_LIMIT || "1d" }
+    );
+
+    // update user
+    const data = await db.users.update({
+      where: { id: user.id },
+      data: {
+        is_online: true,
+      },
+      select: {
+        username: true,
+        is_online: true,
+        role: true,
+      },
+    });
+
+    res.status(statuscode.Ok).json({
+      message: "Login successful",
+      data,
+      token,
+      error: false,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { createUser };
+// logout
+const logout = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+
+    // update dari online ke offline
+    await db.users.update({
+      where: { id },
+      data: {
+        is_online: false,
+      },
+    });
+
+    res.status(statuscode.Ok).json({
+      message: "Logout successful",
+      data: null,
+      error: false,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createUser, login, logout };

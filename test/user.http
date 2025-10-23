@@ -4,11 +4,12 @@
 ### create new user
 POST  http://localhost:3000/api/users 
 content-type: application/json
+Authorization: Berer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxMjM0Nzc5LCJleHAiOjE3NjEzMjExNzl9.iI5pLIcpfsD4X-pZVD7NFTk6nRbC-D7Kqt2_Gk6zNwg
 
 {
-  "username": "admin",
-  "password": "admin",
-  "role": "admin"
+  "username": "waiter",
+  "password": "waiter",
+  "role": "waiter"
 }
 
 
@@ -17,6 +18,11 @@ POST  http://localhost:3000/api/users/login
 content-type: application/json
 
 {
-  "username": "admin",
-  "password": "admin"
+  "username": "kasir",
+  "password": "kasir"
 }
+
+### logout
+POST  http://localhost:3000/api/users/logout
+content-type: application/json
+Authorization: Berer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6ImNhc2hpZXIiLCJpYXQiOjE3NjEyMzU1MjAsImV4cCI6MTc2MTMyMTkyMH0.8kn687dW_nj_bOc2mTlKWGK02k4JDCDf8qYV8NfWVeA
