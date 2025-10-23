@@ -6,7 +6,10 @@ const validate = (scema, request) => {
     abortEarly: false,
     allowUnknown: false,
   });
+
   if (result.error) {
+    console.log(result.error.message);
+
     throw new ResponseError(statuscode.BadRequest, result.error.message);
   } else {
     return result.value;

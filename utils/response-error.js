@@ -1,6 +1,6 @@
 class ResponseError extends Error {
   constructor(status, message) {
-    super(status);
+    super(message);
     this.status = status;
   }
 }

@@ -1,0 +1,22 @@
+
+
+
+### create new user
+POST  http://localhost:3000/api/users 
+content-type: application/json
+
+{
+  "username": "admin",
+  "password": "admin",
+  "role": "admin"
+}
+
+
+### login user
+POST  http://localhost:3000/api/users/login
+content-type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
