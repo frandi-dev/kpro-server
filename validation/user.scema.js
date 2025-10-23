@@ -11,4 +11,6 @@ const loginUserScema = Joi.object({
   password: Joi.string().required(),
 });
 
-module.exports = { createUserScema, loginUserScema };
+const userIdScema = Joi.number().integer().required();
+
+module.exports = { createUserScema, loginUserScema, userIdScema };
