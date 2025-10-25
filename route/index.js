@@ -20,6 +20,7 @@ const io = new Server(server, { cors: { origin: "*" } });
 io.on("connection", connection);
 
 app.use(`/api/users`, require("./user.route"));
+app.use("/api/rooms", require("./room.route"));
 app.use(require("../middleware/error-middleware"));
 
 module.exports = { app, server };

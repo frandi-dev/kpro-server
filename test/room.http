@@ -1,0 +1,14 @@
+### create new room
+POST http://localhost:3000/api/rooms
+Content-Type: application/json
+Authorization: berrer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxMzkzNzE4LCJleHAiOjE3NjE0ODAxMTh9.9i6BP9rNkqQMitxl2UyEd2fGIlVUCX13cmFBIOkLbds
+
+{
+  "name": "R01",
+  "price_per_hour": 50000
+}
+
+### get all
+GET http://localhost:3000/api/rooms
+Content-Type: application/json
+Authorization: berrer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzYxMzkzNzE4LCJleHAiOjE3NjE0ODAxMTh9.9i6BP9rNkqQMitxl2UyEd2fGIlVUCX13cmFBIOkLbds
