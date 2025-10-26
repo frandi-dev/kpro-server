@@ -52,4 +52,37 @@ const getAllRoom = async (req, res, next) => {
   }
 };
 
-module.exports = { createRoom, getAllRoom };
+const deleteRoomByName = async (req, res, next) => {
+  const { name } = req.params;
+
+  try {
+    const count = await db.rooms.count({
+      where: {
+        name: name,
+      },
+    });
+
+    if (count === 0) {
+      throw new ResponseError(statuscode.BadRequest, "Room not found.");
+    }
+
+    const result = await db.rooms.delete({
+      where: {
+        name: name,
+      },
+      select: {
+        name: true,
+      },
+    });
+
+    res.status(statuscode.Ok).json({
+      message: `${result.name} successfully deleted`,
+      data: null,
+      error: false,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createRoom, getAllRoom, deleteRoomByName };
